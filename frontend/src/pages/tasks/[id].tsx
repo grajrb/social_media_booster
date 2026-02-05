@@ -11,7 +11,7 @@ export default function TaskDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
-  const [weather, setWeather] = useState<any>(null);
+  const [weatherInfo, setWeatherInfo] = useState<any>(null);
 
   useEffect(() => {
     if (id) {
@@ -25,37 +25,17 @@ export default function TaskDetail() {
       setTask(data);
       setError('');
       
-      // Load weather if due_date exists
-      if (data.due_date) {
-        loadWeather(data.due_date);
+      // Load weather info for the task
+      try {
+        const weather = await tasksAPI.getWeather(Number(id));
+        setWeatherInfo(weather);
+      } catch (err) {
+        console.error('Weather fetch error:', err);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load task');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const loadWeather = async (dueDate: string) => {
-    try {
-      // Simple weather fetching - in production would use full weather API
-      const date = new Date(dueDate);
-      const daysFrom = Math.floor((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-      
-      let weatherInfo = 'Unknown weather';
-      if (daysFrom < 0) {
-        weatherInfo = 'Date has passed ⏰';
-      } else if (daysFrom === 0) {
-        weatherInfo = 'Due today 📅';
-      } else if (daysFrom === 1) {
-        weatherInfo = 'Due tomorrow 📅';
-      } else {
-        weatherInfo = `Due in ${daysFrom} days 📅`;
-      }
-      
-      setWeather(weatherInfo);
-    } catch (err) {
-      console.error('Weather loading error:', err);
     }
   };
 
@@ -124,9 +104,17 @@ export default function TaskDetail() {
             </span>
           </div>
 
-          {weather && (
+          {weatherInfo && (
             <div style={{ background: '#ecf0f1', padding: '1rem', borderRadius: '4px', marginBottom: '1rem' }}>
-              🌤️ {weather}
+              <h4 style={{ margin: '0 0 0.5rem 0' }}>🌤️ Due Date Status</h4>
+              <p style={{ margin: 0, color: '#2c3e50' }}>
+                {weatherInfo.status || weatherInfo.message || 'Weather information loaded'}
+              </p>
+              {weatherInfo.temperature && (
+                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.9rem', color: '#666' }}>
+                  Current weather at {weatherInfo.location}: {weatherInfo.temperature}°C - {weatherInfo.description}
+                </p>
+              )}
             </div>
           )}
 
@@ -166,3 +154,4 @@ export default function TaskDetail() {
     </div>
   );
 }
+

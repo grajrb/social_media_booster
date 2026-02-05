@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Task
 from app.schemas import TaskCreate, TaskUpdate, TaskResponse
-from typing import List
+from app.services.weather import WeatherService
+from typing import List, Optional
 
 router = APIRouter()
 
@@ -93,3 +94,40 @@ def get_task_stats(db: Session = Depends(get_db)):
         "todo": todo_tasks,
         "completion_rate": (completed_tasks / total_tasks * 100) if total_tasks > 0 else 0
     }
+
+
+@router.get("/weather")
+def get_weather(
+    latitude: Optional[float] = None,
+    longitude: Optional[float] = None,
+    date: Optional[str] = None
+):
+    """Get weather information for a location"""
+    from datetime import datetime as dt
+    
+    parsed_date = None
+    if date:
+        try:
+            parsed_date = dt.fromisoformat(date)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Invalid date format. Use ISO format.")
+    
+    weather = WeatherService.get_weather(latitude, longitude, parsed_date)
+    return weather
+
+
+@router.get("/tasks/{task_id}/weather")
+def get_task_weather(task_id: int, db: Session = Depends(get_db)):
+    """Get weather status for a task's due date"""
+    task = db.query(Task).filter(Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    status = WeatherService.get_due_date_status(task.due_date)
+    return {
+        "task_id": task_id,
+        "due_date": task.due_date,
+        "status": status,
+        "description": f"Task: {task.title}"
+    }
+

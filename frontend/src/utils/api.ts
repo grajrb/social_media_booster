@@ -36,6 +36,16 @@ export interface TaskStats {
   completion_rate: number;
 }
 
+export interface Weather {
+  temperature?: number;
+  description?: string;
+  location?: string;
+  humidity?: number;
+  wind_speed?: number;
+  status?: string;
+  available: boolean;
+}
+
 // Tasks CRUD
 export const tasksAPI = {
   list: async (status?: string, priority?: string): Promise<Task[]> => {
@@ -70,6 +80,35 @@ export const tasksAPI = {
     const { data } = await apiClient.get('/tasks/stats/summary');
     return data;
   },
+
+  getWeather: async (taskId: number): Promise<Weather> => {
+    try {
+      const { data } = await apiClient.get(`/tasks/${taskId}/weather`);
+      return data;
+    } catch (error) {
+      console.error('Error fetching weather:', error);
+      return { available: false, status: 'Could not fetch weather' };
+    }
+  },
+};
+
+// Weather API
+export const weatherAPI = {
+  getWeather: async (latitude?: number, longitude?: number, date?: string): Promise<Weather> => {
+    try {
+      const params = new URLSearchParams();
+      if (latitude) params.append('latitude', latitude.toString());
+      if (longitude) params.append('longitude', longitude.toString());
+      if (date) params.append('date', date);
+      
+      const { data } = await apiClient.get('/weather', { params });
+      return data;
+    } catch (error) {
+      console.error('Error fetching weather:', error);
+      return { available: false, status: 'Could not fetch weather' };
+    }
+  },
 };
 
 export default apiClient;
+
