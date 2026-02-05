@@ -1,0 +1,227 @@
+import React from 'react';
+import type { AppProps } from 'next/app';
+import Link from 'next/link';
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <style>{`
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+          background: #f5f5f5;
+          color: #333;
+        }
+        
+        .navbar {
+          background: #2c3e50;
+          color: white;
+          padding: 1rem 2rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .navbar a {
+          color: white;
+          text-decoration: none;
+          margin: 0 1rem;
+          transition: opacity 0.3s;
+        }
+        
+        .navbar a:hover {
+          opacity: 0.8;
+        }
+        
+        .container {
+          max-width: 1200px;
+          margin: 2rem auto;
+          padding: 0 1rem;
+        }
+        
+        button {
+          background: #3498db;
+          color: white;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 1rem;
+          transition: background 0.3s;
+        }
+        
+        button:hover {
+          background: #2980b9;
+        }
+        
+        button.delete {
+          background: #e74c3c;
+        }
+        
+        button.delete:hover {
+          background: #c0392b;
+        }
+        
+        input, textarea, select {
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 1rem;
+          font-family: inherit;
+          margin: 0.5rem 0;
+          width: 100%;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+          outline: none;
+          border-color: #3498db;
+          box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .form-group {
+          margin: 1rem 0;
+        }
+        
+        label {
+          display: block;
+          margin: 0.5rem 0;
+          font-weight: 500;
+        }
+        
+        .card {
+          background: white;
+          border-radius: 8px;
+          padding: 1.5rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          margin: 1rem 0;
+        }
+        
+        .task-card {
+          background: white;
+          border-left: 4px solid #3498db;
+          padding: 1.5rem;
+          margin: 1rem 0;
+          border-radius: 4px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .task-card.high {
+          border-left-color: #e74c3c;
+        }
+        
+        .task-card.medium {
+          border-left-color: #f39c12;
+        }
+        
+        .task-card.low {
+          border-left-color: #27ae60;
+        }
+        
+        .task-card h3 {
+          margin: 0.5rem 0;
+        }
+        
+        .task-meta {
+          display: flex;
+          gap: 1rem;
+          margin: 0.5rem 0;
+          flex-wrap: wrap;
+        }
+        
+        .badge {
+          display: inline-block;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.85rem;
+          font-weight: 500;
+        }
+        
+        .badge.priority-high {
+          background: #ffe6e6;
+          color: #c0392b;
+        }
+        
+        .badge.priority-medium {
+          background: #fff3e6;
+          color: #d68910;
+        }
+        
+        .badge.priority-low {
+          background: #e6f8f5;
+          color: #1e8449;
+        }
+        
+        .badge.status-todo {
+          background: #ecf0f1;
+          color: #555;
+        }
+        
+        .badge.status-in_progress {
+          background: #e3f2fd;
+          color: #1565c0;
+        }
+        
+        .badge.status-completed {
+          background: #f1f8e9;
+          color: #558b2f;
+        }
+        
+        .actions {
+          display: flex;
+          gap: 0.5rem;
+          margin-top: 1rem;
+        }
+        
+        .actions a, .actions button {
+          text-decoration: none;
+          display: inline-block;
+        }
+        
+        .loading {
+          text-align: center;
+          padding: 2rem;
+          color: #666;
+        }
+        
+        .error {
+          background: #ffe6e6;
+          color: #c0392b;
+          padding: 1rem;
+          border-radius: 4px;
+          margin: 1rem 0;
+        }
+        
+        .success {
+          background: #e6f8f5;
+          color: #1e8449;
+          padding: 1rem;
+          border-radius: 4px;
+          margin: 1rem 0;
+        }
+      `}</style>
+      
+      <nav className="navbar">
+        <Link href="/">
+          <h1 style={{ cursor: 'pointer' }}>📋 Task Manager</h1>
+        </Link>
+        <div>
+          <Link href="/tasks">All Tasks</Link>
+          <Link href="/tasks/new">New Task</Link>
+          <Link href="/dashboard">Dashboard</Link>
+        </div>
+      </nav>
+      
+      <div className="container">
+        <Component {...pageProps} />
+      </div>
+    </>
+  );
+}
+
+export default MyApp;
