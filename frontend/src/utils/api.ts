@@ -53,37 +53,37 @@ export const tasksAPI = {
     if (status) params.append('status', status);
     if (priority) params.append('priority', priority);
     
-    const { data } = await apiClient.get('/tasks', { params });
+    const { data } = await apiClient.get('/api/tasks', { params });
     return data;
   },
 
   get: async (id: number): Promise<Task> => {
-    const { data } = await apiClient.get(`/tasks/${id}`);
+    const { data } = await apiClient.get(`/api/tasks/${id}`);
     return data;
   },
 
   create: async (task: TaskCreateInput): Promise<Task> => {
-    const { data } = await apiClient.post('/tasks', task);
+    const { data } = await apiClient.post('/api/tasks', task);
     return data;
   },
 
   update: async (id: number, updates: Partial<TaskCreateInput>): Promise<Task> => {
-    const { data } = await apiClient.put(`/tasks/${id}`, updates);
+    const { data } = await apiClient.put(`/api/tasks/${id}`, updates);
     return data;
   },
 
   delete: async (id: number): Promise<void> => {
-    await apiClient.delete(`/tasks/${id}`);
+    await apiClient.delete(`/api/tasks/${id}`);
   },
 
   getStats: async (): Promise<TaskStats> => {
-    const { data } = await apiClient.get('/tasks/stats/summary');
+    const { data } = await apiClient.get('/api/tasks/stats/summary');
     return data;
   },
 
   getWeather: async (taskId: number): Promise<Weather> => {
     try {
-      const { data } = await apiClient.get(`/tasks/${taskId}/weather`);
+      const { data } = await apiClient.get(`/api/tasks/${taskId}/weather`);
       return data;
     } catch (error) {
       console.error('Error fetching weather:', error);
@@ -101,7 +101,7 @@ export const weatherAPI = {
       if (longitude) params.append('longitude', longitude.toString());
       if (date) params.append('date', date);
       
-      const { data } = await apiClient.get('/weather', { params });
+      const { data } = await apiClient.get('/api/weather', { params });
       return data;
     } catch (error) {
       console.error('Error fetching weather:', error);
