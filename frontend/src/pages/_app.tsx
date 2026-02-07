@@ -1,10 +1,16 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
 import Link from 'next/link';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
+      <Head>
+        <title>Task Manager</title>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </Head>
+      
       <style>{`
         * {
           margin: 0;
@@ -13,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }
         
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
           background: #f5f5f5;
           color: #333;
         }

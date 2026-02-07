@@ -86,7 +86,7 @@ dir         # Should show: app/, requirements.txt, .env.example
 
 ```bash
 # Create virtual environment
-python -m venv venv
+
 
 # Activate it
 # On Windows:
